@@ -17,10 +17,6 @@ const productSchema = new Schema({
     default: null,
     required: true,
   },
-  src: {
-    type: String,
-    default: null,
-  },
   category: {
     type: String,
     default: null,
