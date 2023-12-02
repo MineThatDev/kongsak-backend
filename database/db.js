@@ -231,7 +231,7 @@ const deleteShippingAddressById = async (id) => {
 // Warranty Card
 const fetchAllWarrantyCards = async () => {
   try {
-    const warrantyCard = await WarrantyCard.find();
+    const warrantyCard = await WarrantyCard.find().sort({ created_at: -1 });
     return warrantyCard.map((wc) => ({
       ...wc.toObject(),
       id: wc._id,
@@ -319,7 +319,7 @@ const deleteWarrantyCardById = async (id) => {
 // Order
 const fetchAllOrders = async () => {
   try {
-    const orders = await Order.find();
+    const orders = await Order.find().sort({ created_at: -1 });
     return orders.map((order) => ({
       ...order.toObject(),
       id: order._id,
@@ -430,6 +430,22 @@ const getOrderProductById = async (id) => {
 const getOrderProductsByParams = async (params) => {
   try {
     const orderProducts = await OrderProduct.find(params);
+    return orderProducts.map((orderProduct) => ({
+      ...orderProduct.toObject(),
+      id: orderProduct._id,
+    }));
+  } catch (err) {
+    throw err;
+  }
+};
+const getOrderProductsByCreatedDates = async (startDate, endDate) => {
+  try {
+    const orderProducts = await OrderProduct.find({
+      created_at: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    });
     return orderProducts.map((orderProduct) => ({
       ...orderProduct.toObject(),
       id: orderProduct._id,
@@ -659,6 +675,7 @@ module.exports = {
   createOrderProduct,
   updateOrderProduct,
   deleteOrderProductById,
+  getOrderProductsByCreatedDates,
   // Order Status,
   fetchAllOrderStatuses,
   getOrderStatusById,
@@ -670,5 +687,5 @@ module.exports = {
   createFile,
   getFilesByParams,
   updateFile,
-  deleteFileById
+  deleteFileById,
 };

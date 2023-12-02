@@ -21,7 +21,16 @@ router.get("/", async (req, res) => {
     if (!Object.keys(req.query).length) {
       orderProducts = await db.fetchAllOrderProducts();
     } else {
-      orderProducts = await db.getOrderProductsByParams(req.query);
+      
+      if (req.query.start_date && req.query.end_date) {
+        orderProducts = await db.getOrderProductsByCreatedDates(
+          req.query.start_date,
+          req.query.end_date
+        );
+        
+      } else {
+        orderProducts = await db.getOrderProductsByParams(req.query);
+      }
     }
 
     res.status(200).json(orderProducts);
