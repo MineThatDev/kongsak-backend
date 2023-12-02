@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../database/db.js");
+const bcrypt = require("bcrypt");
 router.get("/:id", async (req, res) => {
   try {
     const user = await db.getUserById(req.params.id);
@@ -21,15 +22,12 @@ router.get("/", async (req, res) => {
     if (!Object.keys(req.query).length) {
       users = await db.fetchAllUsers();
     } else {
-      if (!req.query.name_like) {
-        users = await db.getUsersByParams(req.query);
+      if (req.query.password) {
+        users = await db.login(req.query)
       } else {
-        let searchString = req.query.first_name_like;
-        delete req.query["first_name_like"];
-        users = await db.getUsersBySearchString(searchString, req.query);
+        users = await db.getUsersByParams(req.query);
       }
     }
-
     res.status(200).json(users);
   } catch (error) {
     console.error(error);
@@ -43,8 +41,13 @@ router.get("/", async (req, res) => {
 });
 router.post("/", async (req, res) => {
   try {
-    const createdUser = await db.createUser(req.body);
-    res.status(201).json(createdUser);
+    const saltRounds = 15;
+    bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
+      if (err) throw new Error(err);
+      delete req.body["password"]
+      const createdUser = await db.createUser({ ...req.body, password: hash });
+      res.status(201).json(createdUser);
+    });
   } catch (error) {
     if (error.name === "ValidationError") {
       // Handle validation errors separately

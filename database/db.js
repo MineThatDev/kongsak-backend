@@ -8,6 +8,7 @@ const Order = require("../models/order");
 const OrderProduct = require("../models/orderProduct");
 const OrderStatus = require("../models/orderStatus");
 const File = require("../models/file");
+const bcrypt = require("bcrypt");
 
 mongoose.set("strictQuery", false);
 mongoose
@@ -106,16 +107,6 @@ const getUsersByParams = async (params) => {
     throw err;
   }
 };
-const getUsersBySearchString = async (searchString, params) => {
-  const users = await User.find({
-    first_name: { $regex: new RegExp(searchString, "i") },
-    ...params,
-  });
-  return users.map((user) => ({
-    ...user.toObject(),
-    id: user._id,
-  }));
-};
 const getUserById = async (id) => {
   try {
     const user = await User.findById(id);
@@ -149,6 +140,20 @@ const deleteUserById = async (id) => {
   if (!deletedUser) throw new Error("User not found");
 
   return { ...deletedUser, id: deletedUser._id };
+};
+const login = async (params) => {
+  const user = await User.find({
+    email: params.email,
+  });
+  bcrypt.compare(params.password, user.password, (err, result) => {
+    if (err) {
+      console.error("Error while comparing passwords:", err);
+    } else if (result) {
+      console.log("Password is correct");
+    } else {
+      console.log("Password is incorrect");
+    }
+  });
 };
 // Shipping Address
 const fetchAllShippingAddresses = async () => {
@@ -625,10 +630,10 @@ module.exports = {
   fetchAllUsers,
   getUserById,
   getUsersByParams,
-  getUsersBySearchString,
   createUser,
   updateUser,
   deleteUserById,
+  login,
   // Shipping Address
   fetchAllShippingAddresses,
   getShippingAddressById,
@@ -670,5 +675,5 @@ module.exports = {
   createFile,
   getFilesByParams,
   updateFile,
-  deleteFileById
+  deleteFileById,
 };
