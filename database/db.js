@@ -255,7 +255,7 @@ const getWarrantyCardById = async (id) => {
 };
 const getWarrantyCardsByParams = async (params) => {
   try {
-    const warrantyCards = await WarrantyCard.find(params);
+    const warrantyCards = await WarrantyCard.find(params).sort({ created_at: -1 });
     return warrantyCards.map((wc) => ({
       ...wc.toObject(),
       id: wc._id,
@@ -343,7 +343,7 @@ const getOrderById = async (id) => {
 };
 const getOrdersByParams = async (params) => {
   try {
-    const orders = await Order.find(params);
+    const orders = await Order.find(params).sort({ created_at: -1 });;
     return orders.map((order) => ({
       ...order.toObject(),
       id: order._id,
