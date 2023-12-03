@@ -231,7 +231,7 @@ const deleteShippingAddressById = async (id) => {
 // Warranty Card
 const fetchAllWarrantyCards = async () => {
   try {
-    const warrantyCard = await WarrantyCard.find().sort({ created_at: -1 });
+    const warrantyCard = await WarrantyCard.find().sort({ _id: -1 });
     return warrantyCard.map((wc) => ({
       ...wc.toObject(),
       id: wc._id,
@@ -255,7 +255,7 @@ const getWarrantyCardById = async (id) => {
 };
 const getWarrantyCardsByParams = async (params) => {
   try {
-    const warrantyCards = await WarrantyCard.find(params).sort({ created_at: -1 });
+    const warrantyCards = await WarrantyCard.find(params).sort({ _id: -1 });
     return warrantyCards.map((wc) => ({
       ...wc.toObject(),
       id: wc._id,
@@ -319,7 +319,7 @@ const deleteWarrantyCardById = async (id) => {
 // Order
 const fetchAllOrders = async () => {
   try {
-    const orders = await Order.find().sort({ created_at: -1 });
+    const orders = await Order.find().sort({ _id: -1 });
     return orders.map((order) => ({
       ...order.toObject(),
       id: order._id,
@@ -343,7 +343,7 @@ const getOrderById = async (id) => {
 };
 const getOrdersByParams = async (params) => {
   try {
-    const orders = await Order.find(params).sort({ created_at: -1 });;
+    const orders = await Order.find(params).sort({ _id: -1 });
     return orders.map((order) => ({
       ...order.toObject(),
       id: order._id,
