@@ -18,10 +18,10 @@ const userSchema = new Schema({
     default: null,
     required: true,
   },
-  telephone: {
-    type: String,
-    default: null,
-  },
+  // telephone: {
+  //   type: String,
+  //   default: null,
+  // },
   role: {
     type: String,
     default: null,
