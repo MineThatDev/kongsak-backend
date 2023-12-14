@@ -265,8 +265,11 @@ const getWarrantyCardsByParams = async (params) => {
   }
 };
 const getWarrantyCardsBySearchString = async (searchString, params) => {
+  const hexRegex = /^[0-9a-fA-F]+$/;
+  const regex = new RegExp(searchString, 'i');
+  const queryBy_id = hexRegex.test(searchString) ? [{ _id: new mongoose.Types.ObjectId(searchString) }, { created_by: { $regex: regex } }] : [{ created_by: { $regex: regex } }];
   const warrantyCards = await WarrantyCard.find({
-    created_by: { $regex: new RegExp(searchString, "i") },
+    $or: queryBy_id,
     ...params,
   });
   return warrantyCards.map((wc) => ({
@@ -353,8 +356,11 @@ const getOrdersByParams = async (params) => {
   }
 };
 const getOrdersBySearchString = async (searchString, params) => {
+  const hexRegex = /^[0-9a-fA-F]+$/;
+  const regex = new RegExp(searchString, 'i');
+  const queryBy_id = hexRegex.test(searchString) ? [{ _id: new mongoose.Types.ObjectId(searchString) }, { created_by: { $regex: regex } }] : [{ created_by: { $regex: regex } }];
   const orders = await Order.find({
-    created_by: { $regex: new RegExp(searchString, "i") },
+    $or: queryBy_id,
     ...params,
   });
   return orders.map((order) => ({
