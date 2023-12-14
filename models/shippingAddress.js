@@ -23,6 +23,21 @@ const shippingAddressSchema = new Schema({
     default: null,
     required: true,
   },
+  district: {
+    type: String,
+    default: null,
+    required: true,
+  },
+  province: {
+    type: String,
+    default: null,
+    required: true,
+  },
+  zip_code: {
+    type: String,
+    default: null,
+    required: true,
+  },
   user_id: {
     type: String,
     default: null,
