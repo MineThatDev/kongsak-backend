@@ -4,13 +4,13 @@ const cors = require("cors");
 const app = express();
 const productRouter = require("./routers/product.js");
 const userRouter = require("./routers/user.js");
-const shippingAddressRouter = require("./routers/shippingAddress.js");
-const warrantyCardRouter = require("./routers/warrantyCard.js");
+const shippingAddressRouter = require("./routers/shipping-address.js");
+const warrantyCardRouter = require("./routers/warranty-card.js");
 const orderRouter = require("./routers/order.js");
-const orderProductRouter = require("./routers/orderProduct.js");
-const orderStatusRouter = require("./routers/orderStatus.js");
+const orderProductRouter = require("./routers/order-product.js");
+const orderStatusRouter = require("./routers/order-status.js");
 const fileRouter = require("./routers/file.js");
-const googleAuthRouter = require("./routers/googleAuth.js")
+const googleAuthRouter = require("./routers/google-auth.js")
 app.use(express.json());
 app.use(cors());
 app.use("/products", productRouter);
@@ -26,4 +26,3 @@ app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
 });
 
-//app.use("/products", productRouter);
