@@ -2,11 +2,11 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const Product = require("../models/product");
 const User = require("../models/user");
-const ShippingAddress = require("../models/shippingAddress");
-const WarrantyCard = require("../models/warrantyCard");
+const ShippingAddress = require("../models/shipping-address");
+const WarrantyCard = require("../models/warranty-card");
 const Order = require("../models/order");
-const OrderProduct = require("../models/orderProduct");
-const OrderStatus = require("../models/orderStatus");
+const OrderProduct = require("../models/order-product");
+const OrderStatus = require("../models/order-status");
 const File = require("../models/file");
 
 mongoose.set("strictQuery", false);
