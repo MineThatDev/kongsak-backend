@@ -5,26 +5,22 @@ const now = new Date();
 const productSchema = new Schema({
   name: {
     type: String,
-    default: null,
     required: true,
   },
   model: {
     type: String,
-    default: null,
     required: true,
   },
   brand: {
     type: String,
-    default: null,
     required: true,
   },
   category: {
     type: String,
-    default: null,
     required: true,
   },
-  price: { type: Number, default: null, require: true },
-  is_active: { type: Boolean, default: null, require: true },
+  price: { type: Number, require: true },
+  is_active: { type: Boolean, default: true },
   created_at: {
     type: String,
     default: new Date(
@@ -32,7 +28,7 @@ const productSchema = new Schema({
     ).toISOString(),
   },
   updated_at: { type: String, default: null },
-});
+}, { versionKey: false });
 const Product = mongoose.model("Product", productSchema);
 
 module.exports = Product;

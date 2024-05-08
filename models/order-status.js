@@ -5,12 +5,10 @@ const now = new Date();
 const orderStatusSchema = new Schema({
   order_id: {
     type: String,
-    default: null,
     required: true,
   },
   title: {
     type: String,
-    default: null,
     required: true,
   },
   status: {
@@ -19,10 +17,9 @@ const orderStatusSchema = new Schema({
   },
   sequence: {
     type: Number,
-    default: null,
     required: true,
   },
-  is_active: { type: Boolean, default: null, require: true },
+  is_active: { type: Boolean, default: true },
   created_at: {
     type: String,
     default: new Date(
@@ -30,7 +27,7 @@ const orderStatusSchema = new Schema({
     ).toISOString(),
   },
   updated_at: { type: String, default: null },
-});
+}, { versionKey: false });
 const OrderStatus = mongoose.model("OrderStatus", orderStatusSchema);
 
 module.exports = OrderStatus;

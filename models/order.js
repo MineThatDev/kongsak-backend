@@ -23,10 +23,10 @@ const orderSchema = new Schema({
     type: String,
     default: null,
   },
-  shipping_address_id: { type: String, default: null, require: true },
-  user_id: { type: String, default: null, require: true },
-  is_active: { type: Boolean, default: null, require: true },
-  created_by: { type: String, default: null, require: true },
+  shipping_address_id: { type: String, require: true },
+  user_id: { type: String, require: true },
+  is_active: { type: Boolean, default: true },
+  created_by: { type: String, require: true },
   created_at: {
     type: String,
     default: new Date(
@@ -34,7 +34,7 @@ const orderSchema = new Schema({
     ).toISOString(),
   },
   updated_at: { type: String, default: null },
-});
+}, { versionKey: false });
 const Order = mongoose.model("Order", orderSchema);
 
 module.exports = Order;

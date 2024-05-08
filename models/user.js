@@ -3,40 +3,37 @@ const { Schema } = require("mongoose");
 const now = new Date();
 
 const userSchema = new Schema({
-  email: {
+  username: {
     type: String,
     default: null,
-    required: true,
-  },
-  first_name: {
-    type: String,
-    default: null,
-    required: true,
-  },
-  last_name: {
-    type: String,
-    default: null,
-    required: true,
-  },
-  // telephone: {
-  //   type: String,
-  //   default: null,
-  // },
-  role: {
-    type: String,
-    default: null,
-    required: true,
+    unique: true
   },
   password: {
     type: String,
     default: null,
   },
-  login_method: {
+  email: {
     type: String,
-    default: null,
+    required: true,
+    unique: true
+  },
+  first_name: {
+    type: String,
     required: true,
   },
-  is_active: { type: Boolean, default: null, require: true },
+  last_name: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: String,
+    default: 'user',
+  },
+  refresh_token: {
+    type: String,
+    default: null
+  },
+  is_active: { type: Boolean, default: true },
   created_at: {
     type: String,
     default: new Date(
@@ -44,7 +41,8 @@ const userSchema = new Schema({
     ).toISOString(),
   },
   updated_at: { type: String, default: null },
-});
+}, { versionKey: false });
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
