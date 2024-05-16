@@ -22,10 +22,10 @@ const getProducts = async (req, res) => {
       .limit(limit);
     const total = await Product.find(req.query).countDocuments();
     return res.status(200).json({
-      total: total,
-      page: page,
-      skip: skip,
-      limit: limit,
+      total: parseInt(total),
+      page: parseInt(page),
+      skip: parseInt(skip),
+      limit: parseInt(limit),
       data: products.map((product) => {
         return { ...product.toObject(), id: product._id };
       }),
