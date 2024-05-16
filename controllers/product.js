@@ -1,67 +1,88 @@
 const Product = require("../models/product");
 
-const fetchAllProducts = async () => {
+const getProductById = async (req, res) => {
   try {
-    const products = await Product.find();
-    return products.map((product) => ({
-      ...product.toObject(),
-      id: product._id,
-    }));
-  } catch (err) {
-    throw err;
+    const product = await Product.findById(req.params.id);
+
+    return res.status(200).json({ ...product.toObject(), id: product._id });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
   }
 };
-const getProductById = async (id) => {
+const getProducts = async (req, res) => {
   try {
-    const product = await Product.findById(id);
-    if (!product) throw new Error("Product not found");
-
-    return { ...product.toObject(), id: product._id };
-  } catch (err) {
-    throw err;
+    const { page = 1, limit = 10 } = req.query;
+    delete req.query["page"];
+    delete req.query["limit"];
+    const skip = (page - 1) * limit;
+    const products = await Product.find(req.query)
+      .skip((page - 1) * limit)
+      .limit(limit);
+    const total = await Product.find(req.query).countDocuments();
+    return res.status(200).json({
+      total: total,
+      page: page,
+      skip: skip,
+      limit: limit,
+      data: products.map((product) => {
+        return { ...product.toObject(), id: product._id };
+      }),
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
   }
 };
-const getProductsByParams = async (params) => {
+const createProduct = async (req, res) => {
   try {
-    const products = await Product.find(params);
+    const createdProduct = await Product.create(req.body);
 
-    return products.map((product) => ({
-      ...product.toObject(),
-      id: product._id,
-    }));
-  } catch (err) {
-    throw err;
+    return res
+      .status(201)
+      .json({ ...createdProduct.toObject(), id: createdProduct._id });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
   }
 };
-const createProduct = async (payload) => {
+const updateProduct = async (req, res) => {
   try {
-    const createdProduct = await Product.create(payload);
-
-    return { ...createdProduct.toObject(), id: createdProduct._id };
-  } catch (err) {
-    throw err;
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    return res
+      .status(200)
+      .json({ ...updatedProduct.toObject(), id: updatedProduct._id });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
   }
 };
-const updateProduct = async (payload) => {
-  if (!payload.id) throw new Error("Missing 'id' property in payload");
-  const updatedProduct = await Product.findByIdAndUpdate(payload.id, payload, {
-    new: true,
-  });
-  if (!updatedProduct) throw new Error("Product not found");
-
-  return { ...updatedProduct.toObject(), id: updatedProduct._id };
-};
-const deleteProductById = async (id) => {
-  const deletedProduct = await Product.findByIdAndDelete(id);
-  if (!deletedProduct) throw new Error("Product not found");
-
-  return { ...deleteProductById, id: deletedProduct._id };
+const deleteProductById = async (req, res) => {
+  try {
+    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+    return res
+      .status(200)
+      .json({ ...deleteProductById, id: deletedProduct._id });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
 };
 
 module.exports = {
-  fetchAllProducts,
   getProductById,
-  getProductsByParams,
+  getProducts,
   createProduct,
   updateProduct,
   deleteProductById,
